@@ -1,0 +1,30 @@
+{
+    "name": "iliain/silverstripe-droppable",
+    "type": "silverstripe-vendormodule",
+    "description": "Provides a field that allows for clicking and dragging of shortcodes into a textarea",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "silverstripe",
+        "modular",
+        "cms",
+        "drop",
+        "drag",
+        "shortcodes"
+    ],
+    "homepage": "http://github.com/Iliain/silverstripe-droppable",
+    "require": {
+        "php": "^7 || ^8",
+        "silverstripe/framework": "^4 || ^5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Iliain\\Droppable\\": "src/"
+        }
+    },
+    "extra": {
+        "expose": [
+            "client/"
+        ]
+    },
+    "minimum-stability": "dev"
+}
