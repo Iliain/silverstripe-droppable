@@ -127,8 +127,8 @@ class DroppableTextareaField extends TextareaField
                 'ButtonRows' => $data,
             ]);
 
-            Requirements::javascript('iliain/droppable: client/javascript/droppable.js');
-            Requirements::css('iliain/droppable: client/css/droppable.css');
+            Requirements::javascript('iliain/silverstripe-droppable: client/javascript/droppable.js');
+            Requirements::css('iliain/silverstripe-droppable: client/css/droppable.css');
         }
 
         return parent::Field($properties);
