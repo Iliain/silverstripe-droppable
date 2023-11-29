@@ -1,4 +1,4 @@
-# Silverstripe Droppable
+# Silverstripe Droppable Textarea
 
 Provides a field that allows for clicking and dragging of shortcodes into a textarea
 
