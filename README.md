@@ -1,5 +1,11 @@
 # Silverstripe Droppable Textarea
 
+[![Latest Stable Version](http://poser.pugx.org/iliain/silverstripe-droppable/v)](https://packagist.org/packages/iliain/silverstripe-droppable) 
+[![Total Downloads](http://poser.pugx.org/iliain/silverstripe-droppable/downloads)](https://packagist.org/packages/iliain/silverstripe-droppable) 
+[![Latest Unstable Version](http://poser.pugx.org/iliain/silverstripe-droppable/v/unstable)](https://packagist.org/packages/iliain/silverstripe-droppable) 
+[![License](http://poser.pugx.org/iliain/silverstripe-droppable/license)](https://packagist.org/packages/iliain/silverstripe-droppable) 
+[![PHP Version Require](http://poser.pugx.org/iliain/silverstripe-droppable/require/php)](https://packagist.org/packages/iliain/silverstripe-droppable)
+
 Provides a field that allows for clicking and dragging of shortcodes into a textarea
 
 ## Installation (with composer)
