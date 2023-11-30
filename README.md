@@ -39,6 +39,10 @@ $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an ex
 
 ![Visual example of the above code](client/images/readme-example.png)
 
+You can also use the method `->setUseDropdown(true)` to use a dropdown instead of buttons. This will use the same data as the buttons, but will be displayed in a dropdown instead. This is useful when dealing with large amounts of buttons.
+
+![Visual example of using the dropdown](client/images/readme-example-2.png)
+
 From here, the user can either:
  * Click on a button to insert the shortcode into the start of the textarea, or the current position if the field is currently selected
  * Drag a button into the textarea to insert the shortcode at the cursor position
