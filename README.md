@@ -37,7 +37,7 @@ $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an ex
     ])
 ```
 
-![Visual example of the above code](client/images/example.png)
+![Visual example of the above code](client/images/readme-example.png)
 
 From here, the user can either:
  * Click on a button to insert the shortcode into the start of the textarea, or the current position if the field is currently selected
