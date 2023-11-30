@@ -27,21 +27,14 @@ use Iliain\Droppable\Fields\DroppableTextareaField;
 $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an example')
     ->setRows(5)
     ->setButtonRow(0, [
-        [
-            'Value' => '25', 
-            'Label' => 'Test Value 25'
-        ]
+        '[value,id=25]' => 'Test Value 25',
     ])
     ->setButtonRow(1, [
-        [
-            'Value' => '50', 
-            'Label' => 'Test Value 50'
-        ]
+        '[value,id=50]' => 'Test Value 50',
     ])
     ->pushButton(1, [
-        'Value' => '100', 
-        'Label' => 'Test Value 100'
-    ]);
+        '[value,id=100]' => 'Test Value 100',
+    ])
 ```
 
 ![Visual example of the above code](client/images/example.png)

@@ -3,6 +3,7 @@
 namespace Iliain\Droppable\Fields;
 
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\TextareaField;
 
@@ -15,11 +16,8 @@ use SilverStripe\Forms\TextareaField;
  *     $title = "Description",
  *     $value = "This is the default description"
  * )->setButtonRow(1, [
- *     [
- *         'Value' => '{{SHORTCODE_1}}', 
- *         'Label' => 'Custom Shortcode 1'
- *     ]
- * ]);
+ *     '[shortcode_key]' => 'Button Label',
+ * ])
  * </code>
  */
 class DroppableTextareaField extends TextareaField
@@ -46,10 +44,7 @@ class DroppableTextareaField extends TextareaField
      * Example of a button array
      * <code>
      * [
-     *     [
-     *         'Value' => '{{SHORTCODE_1}}',
-     *         'Label' => 'Custom Shortcode 1'
-     *     ]
+     *     '[shortcode_key]' => 'Button Label',
      * ]
      * </code>
      *
@@ -100,7 +95,7 @@ class DroppableTextareaField extends TextareaField
             $buttons = [];
         }
 
-        $buttons[] = $button;
+        $buttons = array_merge($buttons, $button);
 
         $this->setButtonRow($row, $buttons);
 
@@ -112,19 +107,26 @@ class DroppableTextareaField extends TextareaField
      */
     public function Field($properties = [])
     {
-        $buttons = $this->getButtonRows();
+        $data = ArrayList::create();
+        $buttonRows = $this->getButtonRows();
 
-        if (count($buttons)) {
-            $data = ArrayList::create();
+        if (count($buttonRows)) {
 
-            foreach ($buttons as $row => $buttons) {
-                $data->push([
-                    'Buttons' => ArrayList::create($buttons),
-                ]);
+            foreach ($buttonRows as $row => $buttons) {
+                $data[$row] = [
+                    'Buttons' => ArrayList::create()
+                ];
+
+                foreach ($buttons as $key => $val) {
+                    $data[$row]['Buttons']->push(ArrayData::create([
+                        'Value' => $key,
+                        'Label' => $val
+                    ]));
+                }
             }
 
             $properties = array_merge($properties, [
-                'ButtonRows' => $data,
+                'ButtonRows' => $data
             ]);
 
             Requirements::javascript('iliain/silverstripe-droppable: client/javascript/droppable.js');
