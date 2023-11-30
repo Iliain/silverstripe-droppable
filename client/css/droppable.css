@@ -1,3 +1,15 @@
 .drag-button {
     margin-bottom: 10px;
 }
+
+.btn-group.drop {
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.dropdown-drag {
+    width: fit-content;
+    white-space: nowrap;
+    padding-top: 0.5385rem;
+    padding-bottom: 0.5385rem;
+}

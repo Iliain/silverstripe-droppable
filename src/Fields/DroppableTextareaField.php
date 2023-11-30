@@ -29,6 +29,13 @@ class DroppableTextareaField extends TextareaField
      */
     protected $buttons = [];
 
+    /**
+     * Whether or not to use a dropdown for the buttons
+     *
+     * @var boolean
+     */
+    protected $useDropdown = false;
+
     public function __construct($name, $title = null, $value = null, $form = null)
     {
         if ($form) {
@@ -36,6 +43,19 @@ class DroppableTextareaField extends TextareaField
         }
 
         parent::__construct($name, $title, $value);
+    }
+
+    /**
+     * Tells the field to use a dropdown interface for the shortcode buttons. Useful for when there are a lot of buttons
+     *
+     * @param boolean $useDropdown
+     * @return self
+     */
+    public function setUseDropdown(bool $useDropdown)
+    {
+        $this->useDropdown = $useDropdown;
+
+        return $this;
     }
 
     /**
@@ -126,6 +146,7 @@ class DroppableTextareaField extends TextareaField
             }
 
             $properties = array_merge($properties, [
+                'UseDropdown' => $this->useDropdown,
                 'ButtonRows' => $data
             ]);
 
