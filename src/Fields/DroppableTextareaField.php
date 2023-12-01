@@ -6,6 +6,7 @@ use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\TextareaField;
+use SilverStripe\ORM\FieldType\DBField;
 
 /**
  * A textarea field that allows for buttons to be dragged and dropped into the textarea
@@ -36,6 +37,13 @@ class DroppableTextareaField extends TextareaField
      */
     protected $useDropdown = false;
 
+    /**
+     * Description to appear to the left of the textarea, beneath the title
+     *
+     * @var string
+     */
+    protected $leftDescription;
+
     public function __construct($name, $title = null, $value = null, $form = null)
     {
         if ($form) {
@@ -56,6 +64,39 @@ class DroppableTextareaField extends TextareaField
         $this->useDropdown = $useDropdown;
 
         return $this;
+    }
+
+    /**
+     * Get whether or not to use a dropdown interface for the shortcode buttons
+     *
+     * @return boolean
+     */
+    public function UseDropdown()
+    {
+        return $this->useDropdown;
+    }
+
+    /**
+     * Set the description to appear to the left of the textarea, beneath the title
+     *
+     * @param string|DBField $leftDescription
+     * @return self
+     */
+    public function setLeftDescription(string $leftDescription)
+    {
+        $this->leftDescription = $leftDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get the description to appear to the left of the textarea, beneath the title
+     *
+     * @return string
+     */
+    public function LeftDescription()
+    {
+        return $this->leftDescription;
     }
 
     /**
@@ -84,7 +125,7 @@ class DroppableTextareaField extends TextareaField
      *
      * @return array
      */
-    public function getButtonRows()
+    public function ButtonRows()
     {
         return $this->buttons;
     }
@@ -128,10 +169,9 @@ class DroppableTextareaField extends TextareaField
     public function Field($properties = [])
     {
         $data = ArrayList::create();
-        $buttonRows = $this->getButtonRows();
+        $buttonRows = $this->ButtonRows();
 
         if (count($buttonRows)) {
-
             foreach ($buttonRows as $row => $buttons) {
                 $data[$row] = [
                     'Buttons' => ArrayList::create()
@@ -146,8 +186,9 @@ class DroppableTextareaField extends TextareaField
             }
 
             $properties = array_merge($properties, [
-                'UseDropdown' => $this->useDropdown,
-                'ButtonRows' => $data
+                'UseDropdown'       => $this->UseDropdown(),
+                'LeftDescription'   => $this->LeftDescription(),
+                'ButtonRows'        => $data
             ]);
 
             Requirements::javascript('iliain/silverstripe-droppable: client/javascript/droppable.js');

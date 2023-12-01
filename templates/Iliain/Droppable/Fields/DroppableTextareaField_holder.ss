@@ -2,7 +2,7 @@
     <% if $Title %>
         <label class="form__field-label" for="{$ID}">
             <h2>{$Title}</h2>
-            <p>Click and drag these into the textarea</p>
+            <% if $LeftDescription %><p>{$LeftDescription}</p><% end_if %>
         </label>
     <% end_if %>
     <div id="{$ID}" class="form__field-holder">
