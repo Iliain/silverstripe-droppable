@@ -47,6 +47,6 @@ From here, the user can either:
  * Click on a button to insert the shortcode into the start of the textarea, or the current position if the field is currently selected
  * Drag a button into the textarea to insert the shortcode at the cursor position
 
-## License
+## TODO
 
-See the [License](LICENSE).
+* Minify the JS and CSS
