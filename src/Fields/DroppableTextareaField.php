@@ -7,6 +7,7 @@ use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\TextareaField;
 use SilverStripe\ORM\FieldType\DBField;
+use Iliain\Droppable\Model\DroppableOption;
 
 /**
  * A textarea field that allows for buttons to be dragged and dropped into the textarea
@@ -17,7 +18,7 @@ use SilverStripe\ORM\FieldType\DBField;
  *     $title = "Description",
  *     $value = "This is the default description"
  * )->setButtonRow(1, [
- *     '[shortcode_key]' => 'Button Label',
+ *     DroppableOption::create('button1', 'Button 1'),
  * ])
  * </code>
  */
@@ -100,22 +101,19 @@ class DroppableTextareaField extends TextareaField
     }
 
     /**
-     * Set selected row of buttons. 
-     * 
-     * Example of a button array
-     * <code>
-     * [
-     *     '[shortcode_key]' => 'Button Label',
-     * ]
-     * </code>
+     * Set selected row of buttons. If the user tries to skip row numbers, the row will be appended to the end
      *
      * @param int $row The row number being inserted into
      * @param array $buttons The array of buttons to insert
      * @return self
      */
-    public function setButtonRow(int $row, array $buttons)
+    public function setButtonRow(int $row, ArrayList $buttons)
     {   
-        $this->buttons[$row] = $buttons;
+        if (array_key_exists($row - 1, $this->buttons)) {
+            $this->buttons[$row] = $buttons;
+        } else {
+            $this->buttons[] = $buttons;
+        }
 
         return $this;
     }
@@ -134,7 +132,7 @@ class DroppableTextareaField extends TextareaField
      * Get the array of buttons for a specific row
      *
      * @param int $row The row number to get
-     * @return array|null
+     * @return ArrayList|null
      */
     public function getButtonRow(int $row)
     {
@@ -145,20 +143,21 @@ class DroppableTextareaField extends TextareaField
      * Push a button to a specific row
      *
      * @param int $row The row number to push to
-     * @param array $button The button to push
+     * @param DroppableOption $button The button to push
      * @return self
      */
-    public function pushButton(int $row, array $button)
+    public function pushButton(int $row, DroppableOption $button)
     {
         $buttons = $this->getButtonRow($row);
 
         if (!$buttons) {
-            $buttons = [];
+            $buttons = ArrayList::create();
+            $buttons->push($button);
+
+            $this->setButtonRow($row, $buttons);            
+        } else {
+            $buttons->push($button);
         }
-
-        $buttons = array_merge($buttons, $button);
-
-        $this->setButtonRow($row, $buttons);
 
         return $this;
     }
@@ -168,23 +167,18 @@ class DroppableTextareaField extends TextareaField
      */
     public function Field($properties = [])
     {
-        $data = ArrayList::create();
         $buttonRows = $this->ButtonRows();
 
         if (count($buttonRows)) {
-            foreach ($buttonRows as $row => $buttons) {
-                $data[$row] = [
-                    'Buttons' => ArrayList::create()
-                ];
+            $data = ArrayList::create();
 
-                foreach ($buttons as $key => $val) {
-                    $data[$row]['Buttons']->push(ArrayData::create([
-                        'Value' => $key,
-                        'Label' => $val
-                    ]));
-                }
+            for ($i = 0; $i < count($buttonRows); $i++) {
+                $data->push(ArrayData::create([
+                    'RowNumber' => $i,
+                    'Buttons' => $buttonRows[$i]
+                ]));
             }
-
+            
             $properties = array_merge($properties, [
                 'UseDropdown'       => $this->UseDropdown(),
                 'LeftDescription'   => $this->LeftDescription(),

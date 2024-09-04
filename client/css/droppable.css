@@ -12,3 +12,12 @@
     padding-top: 0.5385rem;
     padding-bottom: 0.5385rem;
 }
+
+.drop-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* .drop-list li {
+    padding-bottom: 10px;
+} */

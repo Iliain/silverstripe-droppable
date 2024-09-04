@@ -19,15 +19,17 @@
 
         </div>
     <% else %>
-        <% loop $ButtonRows %>
-            <% if $Buttons %>
-                <p> 
-                    <% loop $Buttons %>
-                        <a href="#" class="btn btn-info drag-button" draggable="true" data-value="{$Value}">{$Label}</a>
-                    <% end_loop %>
-                </p>
-            <% end_if %>
-        <% end_loop %>
+        <ul class="drop-list">
+            <% loop $ButtonRows %>
+                <% if $Buttons %>
+                    <li> 
+                        <% loop $Buttons %>
+                            <button href="#" class="btn btn-info drag-button" draggable="true" data-value="{$Value}">{$Label}</button>
+                        <% end_loop %>
+                    </li>
+                <% end_if %>
+            <% end_loop %>
+        </ul>
     <% end_if %>
 <% end_if %>
 

@@ -25,13 +25,14 @@ use Iliain\Droppable\Fields\DroppableTextareaField;
 $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an example')
     ->setRows(5)
     ->setButtonRow(0, [
-        '[value,id=25]' => 'Test Value 25',
+        DroppableOption::create('[OPTION_1]', 'Option 1'),
+        DroppableOption::create('[OPTION_2]', 'Option 2'),
     ])
     ->setButtonRow(1, [
-        '[value,id=50]' => 'Test Value 50',
+        DroppableOption::create('[OPTION_3]', 'Option 3'),
     ])
     ->pushButton(1, [
-        '[value,id=100]' => 'Test Value 100',
+        DroppableOption::create('[OPTION_4]', 'Option 4'),
     ])
 ```
 
@@ -49,9 +50,9 @@ From here, the user can either:
 
 Has the usual functions available to a TextareaField, plus:
 
-* `setButtonRow(int $row, array $buttons)` - Sets the buttons for a particular row. The array of buttons will use the key as the shortcode, and the value as the button text.
+* `setButtonRow(int $row, ArrayList $buttons)` - Sets the buttons for a particular row. The buttons are an ArrayList of DroppableOption objects. Will overwrite any existing buttons in that row.
 
-* `pushButton(int $row, array $buttons)` - Pushes one or more buttons to the end of a particular row. Uses array_merge, duplicate keys will be overwritten.
+* `pushButton(int $row, DroppableOption $buttons)` - Pushes a DroppableOption button to the end of a particular row. 
 
 * `setUseDropdown(bool $useDropdown)` - Sets whether to use a dropdown instead of rows of buttons. Defaults to false. The dropdown will use the row order as the order of the dropdown items.
 
