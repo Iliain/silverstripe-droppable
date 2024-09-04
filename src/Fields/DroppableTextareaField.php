@@ -19,6 +19,7 @@ use Iliain\Droppable\Model\DroppableOption;
  *     $value = "This is the default description"
  * )->setButtonRow(1, [
  *     DroppableOption::create('button1', 'Button 1'),
+ *     ['button2', 'Button 2'),
  * ])
  * </code>
  */
@@ -104,11 +105,17 @@ class DroppableTextareaField extends TextareaField
      * Set selected row of buttons. If the user tries to skip row numbers, the row will be appended to the end
      *
      * @param int $row The row number being inserted into
-     * @param array $buttons The array of buttons to insert
+     * @param ArrayList $buttons The array of buttons to insert
      * @return self
      */
     public function setButtonRow(int $row, ArrayList $buttons)
     {   
+        for ($i = 0; $i < count($buttons); $i++) {
+            if (!$buttons[$i] instanceof DroppableOption) {
+                $buttons[$i] = DroppableOption::create($buttons[$i][0], $buttons[$i][1]);
+            }
+        }
+
         if (array_key_exists($row - 1, $this->buttons)) {
             $this->buttons[$row] = $buttons;
         } else {
@@ -143,12 +150,16 @@ class DroppableTextareaField extends TextareaField
      * Push a button to a specific row
      *
      * @param int $row The row number to push to
-     * @param DroppableOption $button The button to push
+     * @param DroppableOption|array $button The button to push
      * @return self
      */
-    public function pushButton(int $row, DroppableOption $button)
+    public function pushButton(int $row, DroppableOption|array $button)
     {
         $buttons = $this->getButtonRow($row);
+
+        if (!$button instanceof DroppableOption) {
+            $button = DroppableOption::create($button[0], $button[1]);
+        }
 
         if (!$buttons) {
             $buttons = ArrayList::create();
