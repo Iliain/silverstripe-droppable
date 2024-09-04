@@ -17,10 +17,10 @@ use Iliain\Droppable\Model\DroppableOption;
  *     $name = "description",
  *     $title = "Description",
  *     $value = "This is the default description"
- * )->setButtonRow(1, [
+ * )->setButtonRow(1, ArrayList::create([
  *     DroppableOption::create('button1', 'Button 1'),
  *     ['button2', 'Button 2'),
- * ])
+ * ]))
  * </code>
  */
 class DroppableTextareaField extends TextareaField
