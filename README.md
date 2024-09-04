@@ -24,13 +24,13 @@ use Iliain\Droppable\Fields\DroppableTextareaField;
 
 $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an example')
     ->setRows(5)
-    ->setButtonRow(0, [
+    ->setButtonRow(0, ArrayList::create([
         DroppableOption::create('[OPTION_1]', 'Option 1'), // example of using DroppableOption
         ['[OPTION_2]', 'Option 2'], // example of using an array
-    ])
-    ->setButtonRow(1, [
+    ]))
+    ->setButtonRow(1, ArrayList::create([
         DroppableOption::create('[OPTION_3]', 'Option 3'),
-    ])
+    ]))
     ->pushButton(1, DroppableOption::create('[OPTION_4]', 'Option 4'))
     ->pushButton(1, ['[OPTION_5]', 'Option 5'])
 ```
