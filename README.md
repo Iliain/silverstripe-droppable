@@ -35,11 +35,11 @@ $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an ex
     ->pushButton(1, ['[OPTION_5]', 'Option 5'])
 ```
 
-![Visual example of the above code](client/images/readme-example.png)
+ ![Animated example of the field being used](client/images/usage-example.gif)
 
 You can also use the method `->setUseDropdown(true)` to use a dropdown instead of buttons. This will use the same data as the buttons, but will be displayed in a dropdown instead. This is useful when dealing with large amounts of buttons.
 
-![Visual example of using the dropdown](client/images/readme-example-2.png)
+![Animated example of using the dropdown](client/images/usage-example-2.gif)
 
 From here, the user can either:
  * Click on a button to insert the shortcode into the start of the textarea, or the current position if the field is currently selected
@@ -61,5 +61,4 @@ Has the usual functions available to a TextareaField, plus:
 
 * Minify the JS and CSS
 * Allow setting of default dropdown text
-* Add gif examples to readme
 * Add HTMLEditorField support
