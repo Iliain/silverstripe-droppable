@@ -17,22 +17,21 @@ NOTE: This only allows the insertion of shortcodes, it does not provide any func
 
 ## Usage
 
-The following is an example of creating the textarea, assigning buttons to the different rows, and pushing a button to an existing row. You can either provide each option as an array, or use the `DroppableOption::create()` method. Any array items will be automatically converted to a DroppableOption object.
+The following is an example of creating the textarea, assigning buttons to the different rows, and pushing a button to an existing row. Each option/button will be an array, with the first element being the shortcode to insert, and the second being the text to display on the button.
 
 ```PHP
 use Iliain\Droppable\Fields\DroppableTextareaField;
 
 $droppable = DroppableTextareaField::create('Example', 'Example', 'This is an example')
     ->setRows(5)
-    ->setButtonRow(0, ArrayList::create([
-        DroppableOption::create('[OPTION_1]', 'Option 1'), // example of using DroppableOption
-        ['[OPTION_2]', 'Option 2'], // example of using an array
-    ]))
-    ->setButtonRow(1, ArrayList::create([
-        DroppableOption::create('[OPTION_3]', 'Option 3'),
-    ]))
-    ->pushButton(1, DroppableOption::create('[OPTION_4]', 'Option 4'))
-    ->pushButton(1, ['[OPTION_5]', 'Option 5'])
+    ->setButtonRow(0, [
+        ['[OPTION_1]', 'Option 1'],
+        ['[OPTION_2]', 'Option 2'],
+    ])
+    ->setButtonRow(1, [
+        ['[OPTION_3]', 'Option 3']
+    ])
+    ->pushButton(1, ['[OPTION_4]', 'Option 4']);
 ```
 
  ![Animated example of the field being used](client/images/usage-example.gif)
@@ -49,9 +48,11 @@ From here, the user can either:
 
 Has the usual functions available to a TextareaField, plus:
 
-* `setButtonRow(int $row, ArrayList $buttons)` - Sets the buttons for a particular row. The buttons are an ArrayList of DroppableOption objects. Will overwrite any existing buttons in that row.
+* `setButtonRow(int $row, ArrayList $buttons)` - Sets the buttons for a particular row. The buttons are an array of arrays. Will overwrite any existing buttons in that row.
 
-* `pushButton(int $row, DroppableOption $button)` - Pushes a DroppableOption button to the end of a particular row. 
+* `getButtonRow(int $row)` - Gets the buttons for a particular row. Useful for modifying an existing row without just appending to the end.
+
+* `pushButton(int $row, array $button)` - Pushes a button to the end of a particular row. Will append to an existing row, or create a new row if it doesn't exist.
 
 * `setUseDropdown(bool $useDropdown)` - Sets whether to use a dropdown instead of rows of buttons. Defaults to false. The dropdown will use the row order as the order of the dropdown items.
 

@@ -17,10 +17,10 @@ use Iliain\Droppable\Model\DroppableOption;
  *     $name = "description",
  *     $title = "Description",
  *     $value = "This is the default description"
- * )->setButtonRow(1, ArrayList::create([
- *     DroppableOption::create('button1', 'Button 1'),
+ * )->setButtonRow(1, [
+ *     ['button1', 'Button 1'),
  *     ['button2', 'Button 2'),
- * ]))
+ * ]);
  * </code>
  */
 class DroppableTextareaField extends TextareaField
@@ -84,7 +84,7 @@ class DroppableTextareaField extends TextareaField
      * @param string|DBField $leftDescription
      * @return self
      */
-    public function setLeftDescription(string $leftDescription)
+    public function setLeftDescription(string $leftDescription): self
     {
         $this->leftDescription = $leftDescription;
 
@@ -96,7 +96,7 @@ class DroppableTextareaField extends TextareaField
      *
      * @return string
      */
-    public function LeftDescription()
+    public function LeftDescription(): string
     {
         return $this->leftDescription;
     }
@@ -105,16 +105,18 @@ class DroppableTextareaField extends TextareaField
      * Set selected row of buttons. If the user tries to skip row numbers, the row will be appended to the end
      *
      * @param int $row The row number being inserted into
-     * @param ArrayList $buttons The array of buttons to insert
+     * @param array $buttons The array of buttons to insert
      * @return self
      */
-    public function setButtonRow(int $row, ArrayList $buttons)
+    public function setButtonRow(int $row, array $buttons): self
     {   
         for ($i = 0; $i < count($buttons); $i++) {
             if (!$buttons[$i] instanceof DroppableOption) {
                 $buttons[$i] = DroppableOption::create($buttons[$i][0], $buttons[$i][1]);
             }
         }
+
+        $buttons = ArrayList::create($buttons);
 
         if (array_key_exists($row - 1, $this->buttons)) {
             $this->buttons[$row] = $buttons;
@@ -130,7 +132,7 @@ class DroppableTextareaField extends TextareaField
      *
      * @return array
      */
-    public function ButtonRows()
+    public function ButtonRows(): array
     {
         return $this->buttons;
     }
@@ -141,7 +143,7 @@ class DroppableTextareaField extends TextareaField
      * @param int $row The row number to get
      * @return ArrayList|null
      */
-    public function getButtonRow(int $row)
+    public function getButtonRow(int $row): ?ArrayList
     {
         return array_key_exists($row, $this->buttons) ? $this->buttons[$row] : null;
     }
@@ -153,19 +155,17 @@ class DroppableTextareaField extends TextareaField
      * @param DroppableOption|array $button The button to push
      * @return self
      */
-    public function pushButton(int $row, DroppableOption|array $button)
+    public function pushButton(int $row, DroppableOption|array $button): self
     {
         $buttons = $this->getButtonRow($row);
 
-        if (!$button instanceof DroppableOption) {
-            $button = DroppableOption::create($button[0], $button[1]);
-        }
+        $button = DroppableOption::create($button[0], $button[1]);
 
         if (!$buttons) {
             $buttons = ArrayList::create();
             $buttons->push($button);
 
-            $this->setButtonRow($row, $buttons);            
+            $this->setButtonRow($row, $buttons->toArray());            
         } else {
             $buttons->push($button);
         }
@@ -176,7 +176,7 @@ class DroppableTextareaField extends TextareaField
     /**
      * {@inheritdoc}
      */
-    public function Field($properties = [])
+    public function Field($properties = []): string
     {
         $buttonRows = $this->ButtonRows();
 
@@ -206,7 +206,7 @@ class DroppableTextareaField extends TextareaField
     /**
      * {@inheritdoc}
      */
-    public function Type()
+    public function Type(): string
     {
         $type = 'textarea droppable';
 
