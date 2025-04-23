@@ -2,7 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/iliain/silverstripe-droppable/v)](https://packagist.org/packages/iliain/silverstripe-droppable) [![Total Downloads](https://poser.pugx.org/iliain/silverstripe-droppable/downloads)](https://packagist.org/packages/iliain/silverstripe-droppable) [![Latest Unstable Version](https://poser.pugx.org/iliain/silverstripe-droppable/v/unstable)](https://packagist.org/packages/iliain/silverstripe-droppable) [![License](https://poser.pugx.org/iliain/silverstripe-droppable/license)](https://packagist.org/packages/iliain/silverstripe-droppable) [![PHP Version Require](https://poser.pugx.org/iliain/silverstripe-droppable/require/php)](https://packagist.org/packages/iliain/silverstripe-droppable)
 
-Provides a field that allows for clicking and dragging of shortcodes into a textarea. Useful for inserting shortcodes into a textarea without having to type them out.
+Provides a field that allows for clicking and dragging of shortcodes into a related field. Useful for inserting shortcodes into a textarea without having to type them out.
 
 NOTE: This only allows the insertion of shortcodes, it does not provide any functionality for parsing the shortcodes themselves.
 
@@ -17,13 +17,14 @@ NOTE: This only allows the insertion of shortcodes, it does not provide any func
 
 ## Usage
 
-The following is an example of creating the textarea, assigning buttons to the different rows, and pushing a button to an existing row. Each option/button will be an array, with the first element being the shortcode to insert, and the second being the text to display on the button.
+The following is an example of creating a textarea and droppable field, assigning buttons to the different rows, and pushing a button to an existing row. Each option/button will be an array, with the first element being the shortcode to insert, and the second being the text to display on the button.
 
 ```PHP
-use Iliain\Droppable\Fields\DroppableTextareaField;
+use Iliain\Droppable\Fields\DroppableField;
 
-$droppable = DroppableTextareaField::create('Example', 'Example', 'This is an example')
-    ->setRows(5)
+$blockContent = TextareaField::create('BlockContent', 'Block Content');
+
+$droppable = DroppableField::create('Example', 'Example', 'BlockContent')
     ->setButtonRow(0, [
         ['[OPTION_1]', 'Option 1'],
         ['[OPTION_2]', 'Option 2'],
@@ -44,6 +45,22 @@ From here, the user can either:
  * Click on a button to insert the shortcode into the start of the textarea, or the current position if the field is currently selected
  * Drag a button into the textarea to insert the shortcode at the cursor position
 
+Additionally, the field can be swapped to 'wrap' mode, which will wrap a defined set of code around the users current selection. It will look for `$1` and `$2` in the supplied string, and replace them with the selected text and the button value respectively.
+
+```PHP
+$droppable->setWrapSelection(true);
+$droppable->setWrapElement('<div class="$2">$1</div>');
+```
+
+The above would result in the following when clicking the first button while selecting "Selected Text" in the following sentence:
+
+
+```HTML
+This is the Selected Text
+
+This is the <div class="[OPTION_1]">Selected Text</div>
+```
+
 ## Functions
 
 Has the usual functions available to a TextareaField, plus:
@@ -56,7 +73,9 @@ Has the usual functions available to a TextareaField, plus:
 
 * `setUseDropdown(bool $useDropdown)` - Sets whether to use a dropdown instead of rows of buttons. Defaults to false. The dropdown will use the row order as the order of the dropdown items.
 
-* `setLeftDescription(string $description)` - Sets the description to the left of the textarea that appears under the title. Defaults to null.
+* `setWrapSelection(bool $wrap)` - Sets whether to wrap the selection with the button value. Defaults to false.
+
+* `setWrapElement(string $wrap)` - Sets the string to use for wrapping. Defaults to `<span class="$2">$1</span>`. The `$1` will be replaced with the selected text, and the `$2` will be replaced with the button value.
 
 ## TODO
 

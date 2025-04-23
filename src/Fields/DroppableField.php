@@ -5,26 +5,32 @@ namespace Iliain\Droppable\Fields;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
-use SilverStripe\Forms\TextareaField;
-use SilverStripe\ORM\FieldType\DBField;
 use Iliain\Droppable\Model\DroppableOption;
+use SilverStripe\Forms\FormField;
 
 /**
  * A textarea field that allows for buttons to be dragged and dropped into the textarea
  * 
  * <code>
- * DroppableTextareaField::create(
+ * DroppableField::create(
  *     $name = "description",
  *     $title = "Description",
- *     $value = "This is the default description"
+ *     $field = "BlockTitle"
  * )->setButtonRow(1, [
  *     ['button1', 'Button 1'),
  *     ['button2', 'Button 2'),
  * ]);
  * </code>
  */
-class DroppableTextareaField extends TextareaField
+class DroppableField extends FormField
 {
+    /**
+     * The field the buttons will be modiyfing
+     *
+     * @var string
+     */
+    protected $linkedField = null;
+
     /**
      * Array of buttons that will appear above the textarea
      *
@@ -40,19 +46,53 @@ class DroppableTextareaField extends TextareaField
     protected $useDropdown = false;
 
     /**
-     * Description to appear to the left of the textarea, beneath the title
+     * Set the the field to wrap an elemenet around the selected text
+     *
+     * @var bool
+     */
+    protected $wrapSelection = false;
+
+    /**
+     * The element to wrap around the selected text
      *
      * @var string
      */
-    protected $leftDescription;
+    protected $wrapElement = '<span class="$2">$1</span>';
 
-    public function __construct($name, $title = null, $value = null, $form = null)
+    public function __construct($name, $title = null, $field = null, $form = null)
     {
         if ($form) {
             $this->setForm($form);
         }
 
-        parent::__construct($name, $title, $value);
+        if ($field) {
+            $this->setLinkedField($field);
+        }
+
+        parent::__construct($name, $title);
+    }
+
+    /**
+     * Set the field that the buttons will be modifying
+     *
+     * @param string $field
+     * @return self
+     */
+    public function setLinkedField($field): self
+    {
+        $this->linkedField = $field;
+
+        return $this;
+    }
+
+    /**
+     * Get the field that the buttons will be modifying
+     *
+     * @return string
+     */
+    public function LinkedField()
+    {
+        return $this->linkedField;
     }
 
     /**
@@ -61,7 +101,7 @@ class DroppableTextareaField extends TextareaField
      * @param boolean $useDropdown
      * @return self
      */
-    public function setUseDropdown(bool $useDropdown)
+    public function setUseDropdown(bool $useDropdown): self
     {
         $this->useDropdown = $useDropdown;
 
@@ -79,26 +119,61 @@ class DroppableTextareaField extends TextareaField
     }
 
     /**
-     * Set the description to appear to the left of the textarea, beneath the title
+     * Set the buttons to wrap the selected text
      *
-     * @param string|DBField $leftDescription
+     * @param string $wrapSelection
      * @return self
      */
-    public function setLeftDescription(string $leftDescription): self
+    public function setWrapSelection(bool $wrapSelection): self
     {
-        $this->leftDescription = $leftDescription;
+        $this->wrapSelection = $wrapSelection;
 
         return $this;
     }
 
     /**
-     * Get the description to appear to the left of the textarea, beneath the title
+     * Get whether or not to wrap the selected text
+     *
+     * @return boolean
+     */
+    public function WrapSelection()
+    {
+        return $this->wrapSelection;
+    }
+
+    /**
+     * Set the element to wrap around the selected text
+     *
+     * @param string $wrapElement
+     * @return self
+     */
+    public function setWrapElement(string $wrapElement): self
+    {
+        $this->wrapElement = $wrapElement;
+
+        return $this;
+    }
+
+    /**
+     * Get the element to wrap around the selected text
      *
      * @return string
      */
-    public function LeftDescription(): string
+    public function WrapElement($value = null)
     {
-        return $this->leftDescription;
+        return $this->wrapElement;
+    }
+
+    public function WrapElementValue($value)
+    {
+        $element = $this->wrapElement;
+
+        if ($value) {
+            $element = str_replace('$1', '', $element);
+            $element = str_replace('$2', $value, $element);
+        }
+
+        return $element;
     }
 
     /**
@@ -192,7 +267,6 @@ class DroppableTextareaField extends TextareaField
             
             $properties = array_merge($properties, [
                 'UseDropdown'       => $this->UseDropdown(),
-                'LeftDescription'   => $this->LeftDescription(),
                 'ButtonRows'        => $data
             ]);
 
@@ -208,11 +282,7 @@ class DroppableTextareaField extends TextareaField
      */
     public function Type(): string
     {
-        $type = 'textarea droppable';
-
-        if ($this->readonly) {
-            return $type . ' readonly';
-        }
+        $type = 'droppable';
 
         return $type;
     }

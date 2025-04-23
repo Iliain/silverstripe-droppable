@@ -9,29 +9,41 @@ window.ss = window.ss || {};
         jQuery.entwine('ss', ($) => {
             $(`.drag-button`).entwine({
                 onmatch() {
-                    const textArea = this.closest('.field').find('textarea');
+                    const form = this.closest('form');
+                    const linkedField = $(this).data().field;
+
+                    // find by name
+                    const field = form.find(`[name="${linkedField}"]`);
 
                     // On button click
                     this.on('click', function(e) {
                         e.preventDefault();
 
-                        // If the option is blank, don't do anything
                         if (!this.dataset.value) {
                             return;
                         }
-
-                        const cursorPos = textArea.prop('selectionStart');
-
-                        const v = textArea.val();
-                        const textBefore = v.substring(0, cursorPos);
-                        const textAfter  = v.substring(cursorPos, v.length);
-                        
-                        textArea.val(textBefore + this.dataset.value + textAfter);
-
-                        // Reselect the textarea and put cursor back at the previous position
-                        textArea.focus();
-                        textArea.prop('selectionStart', cursorPos + this.dataset.value.length);
-                        textArea.prop('selectionEnd', cursorPos + this.dataset.value.length);
+                    
+                        const input = field.get(0);
+                        input.focus();
+                    
+                        const selectionStart = input.selectionStart;
+                        const selectionEnd = input.selectionEnd;
+                    
+                        if (this.dataset.wrap) {
+                            const wrapElement = this.dataset.wrap;
+                            const selectedText = input.value.substring(selectionStart, selectionEnd);
+                    
+                            const wrapText = wrapElement
+                                .replace(/\$1/g, selectedText || '')
+                                .replace(/\$2/g, this.dataset.value);
+                    
+                            input.setRangeText(wrapText, selectionStart, selectionEnd, 'end');
+                        } else {
+                            input.setRangeText(this.dataset.value, selectionStart, selectionStart, 'end');
+                        }
+                    
+                        // Trigger an input event so the browser tracks it in undo stack
+                        input.dispatchEvent(new InputEvent('input', { bubbles: true }));
                     });
 
                     // On button drag

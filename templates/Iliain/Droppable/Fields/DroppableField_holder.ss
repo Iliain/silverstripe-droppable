@@ -1,8 +1,7 @@
 <div id="{$HolderID}" class="form-group field<% if $extraClass %> {$extraClass}<% end_if %>">
     <% if $Title %>
         <label class="form__field-label" for="{$ID}">
-            <h2>{$Title}</h2>
-            <% if $LeftDescription %><p>{$LeftDescription}</p><% end_if %>
+            {$Title}
         </label>
     <% end_if %>
     <div id="{$ID}" class="form__field-holder">
