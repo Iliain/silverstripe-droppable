@@ -81,4 +81,3 @@ Has the usual functions available to a TextareaField, plus:
 
 * Minify the JS and CSS
 * Allow setting of default dropdown text
-* Add HTMLEditorField support
